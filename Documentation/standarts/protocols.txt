@@ -1,0 +1,1 @@
+All communication will be HTTP json.

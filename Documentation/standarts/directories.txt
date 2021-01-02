@@ -1,0 +1,17 @@
+├── frontend   
+│   ├── public
+|   |   └──<standart-files>    
+│   └── src  
+|   |   └──<standart-files>
+|   |   └──Components(Components for Pages)
+|   |   |   └──<files>
+|   |   └──Pages(All Pages)
+|   |       └──<files>
+│   │  
+│   └── <standart-files>  
+├── models 
+│   └── models.go(consist models)
+├── database 
+│   └── database.go(database CRUD codes)  
+└── main.go  
+└── handlers.go(all api codes)

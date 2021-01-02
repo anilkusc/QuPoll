@@ -1,0 +1,18 @@
++Create objects
++Create database CRUDs
++    - CRUD for Users
++    - CRUD for Sessions
++    - CRUD for Questions
++API/main
++    - all Api URI
++    - all configuration
++Create UI
++    - Create main page
++    - Create routing
++    - Create questions page
++    - Create sign in modal(Sign in should change to logout after login)
++Dockerize
++    - Dockerize with nginx(default.conf ayarlamaları ve Dockerfile ayarlamaları bitir ve deploy et.)
+
+Deploy
+    - Load Test with JMeter
