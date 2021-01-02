@@ -20,7 +20,7 @@ class Main extends React.Component {
         if (data != null) {
           this.setState({ questions: data })
         } else {
-          alert("There is error while fetching questions")
+          alert("There is no question on this session ")
         }
       })
       .catch(error => {
