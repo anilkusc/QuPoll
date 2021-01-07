@@ -60,6 +60,7 @@ class SignIn extends React.Component {
           this.props.handleSetLoggedIn()
           this.props.handleCloseLogin()
         }else{
+
           alert("Username or password is wrong")
         }
       })

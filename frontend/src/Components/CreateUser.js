@@ -77,7 +77,7 @@ class CreateUser extends React.Component {
       })
       .catch(error => {
         console.log("Error ========>", error);
-        alert("Error While login")
+        alert("Error While Create Session")
       })
 
   }
@@ -128,7 +128,7 @@ class CreateUser extends React.Component {
                 <Select
                   labelId="demo-simple-select-placeholder-label-label"
                   id="demo-simple-select-placeholder-label"
-                  defaultValue={this.props.role}
+                  defaultValue={"admin"}
                   onChange={this.handleChangeRole}
                   displayEmpty
                   className={classes.selectEmpty}

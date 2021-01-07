@@ -106,8 +106,11 @@ func ReadSessions(session ...models.Session) ([]models.Session, error) {
 		query = "SELECT * FROM Sessions"
 
 	} else if len(session) == 1 {
-		//query = "SELECT * FROM Sessions where id=" + strconv.Itoa(session[0].Id)
-		query = "SELECT * FROM Sessions where Name='" + session[0].Name + "'"
+		if session[0].Id == 0 {
+			query = "SELECT * FROM Sessions where Name='" + session[0].Name + "'"
+		} else {
+			query = "SELECT * FROM Sessions where Name='" + strconv.Itoa(session[0].Id) + "'"
+		}
 	} else {
 		err := errors.New("There is more than 1 arguments")
 		return nil, err
@@ -177,12 +180,16 @@ func CreateUser(user models.User) (models.User, error) {
 
 func ReadUsers(user ...models.User) ([]models.User, error) {
 	var query string
-	// TODO: add user id control and create the query by that
 	if len(user) < 1 {
 		query = "SELECT * FROM Users"
 
 	} else if len(user) == 1 {
-		query = "SELECT * FROM Users where Username=" + "'" + user[0].Username + "'"
+		if user[0].Id == 0 {
+			query = "SELECT * FROM Users where Username=" + "'" + user[0].Username + "'"
+		} else {
+			query = "SELECT * FROM Users where Id=" + "'" + strconv.Itoa(user[0].Id) + "'"
+		}
+
 	} else {
 		err := errors.New("There is more than 1 arguments")
 		return nil, err

@@ -40,45 +40,40 @@ const useStyles = theme => ({
   }
 });
 
-class EditUser extends React.Component {
+class EditSession extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       id: this.props.id,
-      username: this.props.username,
+      session_name: this.props.session_name,
       password: this.props.password,
-      role: this.props.role,
     };
-    this.handleChangeUsername = this.handleChangeUsername.bind(this);
+    this.handleChangeSessionname = this.handleChangeSessionname.bind(this);
     this.handleChangePassword = this.handleChangePassword.bind(this);
-    this.handleChangeRole = this.handleChangeRole.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  handleChangeUsername(event) {
-    this.setState({ username: event.target.value });
+  handleChangeSessionname(event) {
+    this.setState({ session_name: event.target.value });
   }
   handleChangePassword(event) {
     this.setState({ password: event.target.value });
-  }
-  handleChangeRole(event) {
-    this.setState({ role: event.target.value });
   }
   handleSubmit(event) {
     event.preventDefault();
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: "{\"id\":"+ this.state.id +",\"username\":\"" + this.state.username + "\",\"password\":\"" + this.state.password + "\",\"role\":\"" + this.state.role + "\"}"
+      body: "{\"id\":"+ this.state.id +",\"session_name\":\"" + this.state.session_name + "\",\"password\":\"" + this.state.password + "\"}"
     };
-    fetch('/backend/UpdateUser', requestOptions)
+    fetch('/backend/UpdateSession', requestOptions)
       .then(response => response.json())
       .then(data => {
-        this.props.onChangeUsers(data)
+        this.props.onChangeSessions(data)
         this.props.handleCloseEdit()
       })
       .catch(error => {
         console.log("Error ========>", error);
-        alert("Error Updating User")
+        alert("Error Updating Session")
       })
   }
   render() {
@@ -92,7 +87,7 @@ class EditUser extends React.Component {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Edit User
+              Edit Session
         </Typography>
             <form className={classes.form} noValidate onSubmit={this.handleSubmit}>
               <TextField
@@ -114,11 +109,11 @@ class EditUser extends React.Component {
                 required
                 fullWidth
                 id="text"
-                label="Username"
-                name="username"
-                autoComplete="username"
-                defaultValue={this.state.username}
-                onChange={this.handleChangeUsername}
+                label="Sessin Name"
+                name="sessionname"
+                autoComplete="sessionname"
+                defaultValue={this.state.session_name}
+                onChange={this.handleChangeSessionname}
                 autoFocus
               />
               <TextField
@@ -135,21 +130,6 @@ class EditUser extends React.Component {
                 onChange={this.handleChangePassword}
                 helperText="Leave this blank if you do not want to change password"
               />
-              <FormControl className={classes.formControl}>
-                <InputLabel shrink id="demo-simple-select-placeholder-label-label">
-                  Role
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-placeholder-label-label"
-                  id="demo-simple-select-placeholder-label"
-                  defaultValue={this.state.role}
-                  onChange={this.handleChangeRole}
-                  displayEmpty
-                  className={classes.selectEmpty}
-                >
-                  <MenuItem value={"admin"}>admin</MenuItem>
-                </Select>
-              </FormControl>
               <Button
                 type="submit"
                 fullWidth
@@ -158,7 +138,7 @@ class EditUser extends React.Component {
                 onClick={this.handleSubmit}
                 className={classes.submit}
               >
-                Update User
+                Update Session
               </Button>
             </form>
           </div>
@@ -168,4 +148,4 @@ class EditUser extends React.Component {
   }
 }
 
-export default withStyles(useStyles)(EditUser)
+export default withStyles(useStyles)(EditSession)

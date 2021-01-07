@@ -90,8 +90,6 @@ class Users extends React.Component {
         }
       }
     }
-    //TODO Delete Request
-    console.log(deleted)
   }
   handleCloseEdit() {
     this.setState({ openEdit: false })

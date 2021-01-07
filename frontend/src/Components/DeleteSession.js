@@ -35,7 +35,7 @@ const useStyles = theme => ({
   }
 });
 
-class DeleteUser extends React.Component {
+class DeleteSession extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,29 +45,29 @@ class DeleteUser extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     var sendBody = []
-    if(this.props.users < 1 ){
-      alert("You must select at least 1 user for deleting.")
+    if(this.props.sessions < 1 ){
+      alert("You must select at least 1 session for deleting.")
     }
-    this.props.users.map((user) => {
+    this.props.sessions.map((session) => {
       function AddRowToTable(id) {
         sendBody.push({ id: parseInt(id) });
       }
-      AddRowToTable(user)
+      AddRowToTable(session)
     })
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(sendBody)
     };
-    fetch('/backend/DeleteUser', requestOptions)
+    fetch('/backend/DeleteSession', requestOptions)
       .then(response => response.json())
       .then(data => {
-        this.props.onChangeUsers(data)
+        this.props.onChangeSessions(data)
         this.props.handleCloseDelete()
       })
       .catch(error => {
         console.log("Error ========>", error);
-        alert("Error While Delete User")
+        alert("Error While Delete Session")
       })
   }
   render() {
@@ -81,9 +81,9 @@ class DeleteUser extends React.Component {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Users with the following id will be deleted. Do you confirm?
+              Sessions with the following id will be deleted. Do you confirm?
             </Typography>
-            {JSON.stringify(this.props.users)}
+            {JSON.stringify(this.props.sessions)}
             <Button
               type="submit"
               fullWidth
@@ -101,4 +101,4 @@ class DeleteUser extends React.Component {
   }
 }
 
-export default withStyles(useStyles)(DeleteUser)
+export default withStyles(useStyles)(DeleteSession)
