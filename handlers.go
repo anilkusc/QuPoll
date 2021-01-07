@@ -88,16 +88,22 @@ func AskQuestion(w http.ResponseWriter, r *http.Request) {
 	}
 	now := time.Now()
 	question.Date = now.Format("2006-01-02 15:04")
-	createdQuestion, err := database.CreateQuestion(question)
+	_, err = database.CreateQuestion(question)
 	if err != nil {
 		log.Println("Error writing question to database")
 		io.WriteString(w, `Error writing question to database`)
 		return
 	}
-	returnValue, err := json.Marshal(createdQuestion)
+	questions, err := database.ReadQuestions()
 	if err != nil {
-		log.Println("Error marshalling the question")
-		io.WriteString(w, `Error marshalling the question`)
+		log.Println("Cannot Read Questions")
+		io.WriteString(w, `Cannot Read Questions`)
+		return
+	}
+	returnValue, err := json.Marshal(questions)
+	if err != nil {
+		log.Println("Error marshalling questions")
+		io.WriteString(w, `Error marshalling questions`)
 		return
 	}
 	io.WriteString(w, string(returnValue))
@@ -135,16 +141,129 @@ func LikeQuestion(w http.ResponseWriter, r *http.Request) {
 	}
 	willBeUpdatedQuestion[0].LikeCount = willBeUpdatedQuestion[0].LikeCount + 1
 
-	updatedQuestion, err := database.UpdateQuestion(willBeUpdatedQuestion[0])
+	_, err = database.UpdateQuestion(willBeUpdatedQuestion[0])
 	if err != nil {
 		log.Println("Error updating question on database")
 		io.WriteString(w, `Error updating question on database`)
 		return
 	}
-	returnValue, err := json.Marshal(updatedQuestion)
+	questions, err := database.ReadQuestions()
 	if err != nil {
-		log.Println("Error marshalling the question")
-		io.WriteString(w, `Error marshalling the question`)
+		log.Println("Cannot Read Questions")
+		io.WriteString(w, `Cannot Read Questions`)
+		return
+	}
+	returnValue, err := json.Marshal(questions)
+	if err != nil {
+		log.Println("Error marshalling questions")
+		io.WriteString(w, `Error marshalling questions`)
+		return
+	}
+	io.WriteString(w, string(returnValue))
+	return
+}
+func GetUsers(w http.ResponseWriter, r *http.Request) {
+	users, err := database.ReadUsers()
+	if err != nil {
+		log.Println("Error getting users from database")
+		io.WriteString(w, `Error getting users from database`)
+		return
+	}
+	for _, user := range users {
+		user.Password = "hidden"
+	}
+	returnValue, err := json.Marshal(users)
+	if err != nil {
+		log.Println("Error marshalling users")
+		io.WriteString(w, `Error marshalling users`)
+		return
+	}
+	io.WriteString(w, string(returnValue))
+	return
+}
+func CreateUser(w http.ResponseWriter, r *http.Request) {
+	var user models.User
+	var users []models.User
+	err := json.NewDecoder(r.Body).Decode(&user)
+	if err != nil {
+		log.Println("Error decoding json on CreateUser")
+		io.WriteString(w, `Error decoding json on CreateUser`)
+		return
+	}
+	_, err = database.CreateUser(user)
+	if err != nil {
+		log.Println("Error writing user to database")
+		io.WriteString(w, `Error writing user to database`)
+		return
+	}
+	users, err = database.ReadUsers()
+	if err != nil {
+		log.Println("Cannot Read Users")
+		io.WriteString(w, `Cannot Read Users`)
+		return
+	}
+	returnValue, err := json.Marshal(users)
+	if err != nil {
+		log.Println("Error marshalling users")
+		io.WriteString(w, `Error marshalling users`)
+		return
+	}
+	io.WriteString(w, string(returnValue))
+	return
+}
+func DeleteUser(w http.ResponseWriter, r *http.Request) {
+	var users []models.User
+	err := json.NewDecoder(r.Body).Decode(&users)
+	if err != nil {
+		log.Println("Error decoding json on DeleteUser")
+		io.WriteString(w, `Error decoding json on DeleteUser`)
+		return
+	}
+	_, err = database.DeleteUsers(users)
+	if err != nil {
+		log.Println("Error writing deleting users")
+		io.WriteString(w, `Error writing deleting users`)
+		return
+	}
+	users, err = database.ReadUsers()
+	if err != nil {
+		log.Println("Cannot Read Users")
+		io.WriteString(w, `Cannot Read Users`)
+		return
+	}
+	returnValue, err := json.Marshal(users)
+	if err != nil {
+		log.Println("Error marshalling users")
+		io.WriteString(w, `Error marshalling users`)
+		return
+	}
+	io.WriteString(w, string(returnValue))
+	return
+}
+func UpdateUser(w http.ResponseWriter, r *http.Request) {
+	var user models.User
+	err := json.NewDecoder(r.Body).Decode(&user)
+	if err != nil {
+		log.Println("Error decoding json on UpdateUser")
+		io.WriteString(w, `Error decoding json on UpdateUser`)
+		return
+	}
+	_, err = database.UpdateUser(user)
+	if err != nil {
+		log.Println("Error writing updating users")
+		io.WriteString(w, `Error writing updating users`)
+		return
+	}
+	users, err := database.ReadUsers()
+	if err != nil {
+		log.Println("Cannot Read Users")
+		io.WriteString(w, `Cannot Read Users`)
+		return
+	}
+	returnValue, err := json.Marshal(users)
+	if err != nil {
+		log.Println("Error marshalling users")
+		io.WriteString(w, `Error marshalling users`)
 		return
 	}
 	io.WriteString(w, string(returnValue))

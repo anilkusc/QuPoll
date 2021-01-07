@@ -213,9 +213,9 @@ func ReadUsers(user ...models.User) ([]models.User, error) {
 }
 
 func UpdateUser(user models.User) (models.User, error) {
-	var users []models.User
-	users, _ = ReadUsers(user)
-	user.Id = users[0].Id
+	//var users []models.User
+	//users, _ = ReadUsers(user)
+	//user.Id = users[0].Id
 	statement, err := db.Prepare("UPDATE Users SET Username=? , Password=? , Role=? where Id=?")
 	if err != nil {
 		return user, err
@@ -230,10 +230,10 @@ func DeleteUsers(users []models.User) ([]models.User, error) {
 	// TODO: not delete with foreach.Delete all the given users on the database side.
 	for _, user := range users {
 
-		var tempUsers []models.User
+		/*var tempUsers []models.User
 		tempUsers, _ = ReadUsers(user)
 		user.Id = tempUsers[0].Id
-
+		*/
 		statement, err := db.Prepare("DELETE FROM Users where Id=?")
 		if err != nil {
 			return nil, err

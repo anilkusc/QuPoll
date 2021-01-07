@@ -22,13 +22,17 @@ class QuestionCard extends React.Component {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: "{\"session\":{\"session_id\":1},\"question_id\":"+this.props.question_id+"}",
+            body: "{\"session\":{\"id\":1},\"id\":"+this.props.question.id+"}",
         };
-        console.log(requestOptions)
+        if (this.props.question.id == null || this.props.question.id == ""){
+            console.log(this.props.question)
+            alert("id is not defined")
+            return
+        }
         fetch('/backend/LikeQuestion', requestOptions)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
+                this.props.handleUpdateQuestions(data)
             })
             .catch(error => {
                 console.log("Error ========>", error);
@@ -36,14 +40,12 @@ class QuestionCard extends React.Component {
             })
     }
     render() {
-
-
         return (
             <div>
                 <Card>
                     <CardContent>
                         <Typography variant="body2" color="textSecondary" component="p">
-                            <b>{this.props.question}</b>
+                            <b>{this.props.question.id}</b>
                         </Typography>
                     </CardContent>
                     <CardActions disableSpacing>
@@ -55,14 +57,14 @@ class QuestionCard extends React.Component {
                         </div>
                         <IconButton aria-label="add to favorites">
                             <FavoriteIcon onClick={this.handleLikeQuestion} color="secondary" />
-                            {this.props.like_count}
+                            {this.props.question.like_count}
                           &nbsp;
                          </IconButton>
                         <FaceIcon />
-                        {this.props.asker} &nbsp;
+                        {this.props.question.asker} &nbsp;
                         <DateRangeIcon />
                           &nbsp;
-                           |{this.props.date}|
+                           |{this.props.question.date}|
                     </CardActions>
                 </Card>
             </div>

@@ -34,6 +34,10 @@ func main() {
 	r.HandleFunc("/backend/AskQuestion", AskQuestion).Methods("POST")
 	r.HandleFunc("/backend/GetQuestions", GetQuestions).Methods("POST")
 	r.HandleFunc("/backend/LikeQuestion", LikeQuestion).Methods("POST")
+	r.HandleFunc("/backend/GetUsers", GetUsers).Methods("POST")
+	r.HandleFunc("/backend/CreateUser", CreateUser).Methods("POST")
+	r.HandleFunc("/backend/DeleteUser", DeleteUser).Methods("POST")
+	r.HandleFunc("/backend/UpdateUser", UpdateUser).Methods("POST")
 
 	fmt.Println("Serving on:8080")
 	if *https == true {

@@ -31,11 +31,14 @@ class AskQuestion extends React.Component {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: "{\"session\":{\"session_id\":"+this.state.session+"},\"asker\":\""+ this.state.asker +"\",\"question\":\""+this.state.question+"\"}",
+            body: "{\"session\":{\"id\":"+this.state.session+"},\"asker\":\""+ this.state.asker +"\",\"question\":\""+this.state.question+"\"}",
         };
         fetch('/backend/AskQuestion', requestOptions)
             .then(response => response.json())
-            .then(data => {console.log(data)})
+            .then(data => {
+                //this.setState({asker: "",question: ""})
+                this.props.handleUpdateQuestions(data)
+            })
             .catch(error => {
                 console.log("Error ========>", error);
                 alert("There is error while asking question")
@@ -63,7 +66,7 @@ class AskQuestion extends React.Component {
                             </Typography>
                         </CardContent>
                         <CardActions>
-                            <Button size="small" onClick={this.handleSubmit} >Ask Question</Button>
+                            <Button size="small" onClick={this.handleSubmit}>Ask Question</Button>
                         </CardActions>
                     </Card><br></br><br></br>
 

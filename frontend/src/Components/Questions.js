@@ -24,21 +24,37 @@ class Questions extends React.Component {
 
     render() {
         const { classes } = this.props;
+
         return (
             <div>
                 <Container component="main">
-                    <Grid container justify="center" spacing={1} >
-                        <Grid item xs={12} sm={12}>
+                    <Grid container justify="center" spacing={12} >
+                        <Grid item md={6}>
                             <Card>
                                 <CardHeader
-                                    title={"Questions"}
+                                    title={"Waiting For Answer"}
                                     className={classes.cardHeader}
                                 />
                                 <CardContent>
-                                    {this.props.questions.sort((a, b) => a.like_count > b.like_count ? -1:1).map(question => 
-                                    <ul key={question.question_id}>
-                                        <QuestionCard question_id={question.question_id} like_count={question.like_count} question={question.question} asker={question.asker} date={question.date} />
-                                    </ul>
+                                    {this.props.questions.sort((a, b) => a.like_count > b.like_count ? -1 : 1).map(question =>
+                                        <ul key={question.question_id}>
+                                            <QuestionCard handleUpdateQuestions={this.props.handleUpdateQuestions} question={question}/>
+                                        </ul>
+                                    )}
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                        <Grid item md={6}>
+                            <Card>
+                                <CardHeader
+                                    title={"Answered"}
+                                    className={classes.cardHeader}
+                                />
+                                <CardContent>
+                                    {this.props.questions.sort((a, b) => a.like_count > b.like_count ? -1 : 1).map(question =>
+                                        <ul key={question.id}>
+                                            <QuestionCard handleUpdateQuestions={this.props.handleUpdateQuestions} question={question}/>
+                                        </ul>
                                     )}
                                 </CardContent>
                             </Card>

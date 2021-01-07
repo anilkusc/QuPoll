@@ -1,14 +1,14 @@
 package models
 
 type User struct {
-	Id       int    `json:"user_id"`
+	Id       int    `json:"id"`
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Role     string `json:"role"`
 }
 
 type Session struct {
-	Id             int    `json:"session_id"`
+	Id             int    `json:"id"`
 	Name           string `json:"session_name"`
 	Password       string `json:"password"`
 	UserVoteCount  int    `json:"user_vote_count"`
@@ -16,7 +16,7 @@ type Session struct {
 }
 
 type Question struct {
-	Id        int     `json:"question_id"`
+	Id        int     `json:"id"`
 	Asker     string  `json:"asker"`
 	Date      string  `json:"date"`
 	Session   Session `json:"session"`
