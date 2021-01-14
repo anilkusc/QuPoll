@@ -29,8 +29,9 @@ class Main extends React.Component {
     fetch('/backend/GetQuestions', requestOptions)
       .then((response) => response.json())
       .then((data) => {
+        console.log(data[0].answered)
         if (data != null) {
-          this.setState({ questions: data })
+          this.setState({questions:data})
         } else {
           alert("There is no question on this session ")
         }
@@ -39,9 +40,9 @@ class Main extends React.Component {
         console.log("Error ========>", error);
         alert("There is error while fetching questions")
       })
+
   }
   componentDidUpdate(prevProps) {
-    // Genel kullanım (prop değerlerini karşılaştırmayı unutmayınız!):
     if (this.props.session !== prevProps.session) {
       const requestOptions = {
         method: 'POST',
@@ -51,7 +52,8 @@ class Main extends React.Component {
       fetch('/backend/GetQuestions', requestOptions)
         .then((response) => response.json())
         .then((data) => {
-          if (data != null) {
+
+          if (data != null) {            
             this.setState({ questions: data })
           } else {
             this.setState({ questions: [] })

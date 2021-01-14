@@ -19,16 +19,13 @@ class Questions extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            ss:this.props.session,
         };
-        
     }
-
     render() {
         const { classes } = this.props;
-        
+
         return (
-            <div key={this.props.session}>
+            <div >
                 <Container component="main">
                     <Grid container justify="center" spacing={12} >
                         <Grid item md={6}>
@@ -38,10 +35,15 @@ class Questions extends React.Component {
                                     className={classes.cardHeader}
                                 />
                                 <CardContent>
-                                    {this.props.questions.sort((a, b) => a.like_count > b.like_count ? -1 : 1).map(question =>
-                                        <ul key={question.id}>                                           
-                                            <QuestionCard session={this.props.session} handleUpdateQuestions={this.props.handleUpdateQuestions} question={question}/>
-                                        </ul>
+                                    {this.props.questions.sort((a, b) => a.like_count > b.like_count ? -1 : 1).map(question => {
+                                        console.log(question.answered)
+                                        if (question.answered == 0) {
+                                            return(
+                                            <ul key={question.id}>
+                                                <QuestionCard session={this.props.session} handleUpdateQuestions={this.props.handleUpdateQuestions} question={question} />
+                                            </ul>)
+                                        }
+                                    }
                                     )}
                                 </CardContent>
                             </Card>
@@ -53,10 +55,15 @@ class Questions extends React.Component {
                                     className={classes.cardHeader}
                                 />
                                 <CardContent>
-                                    {this.props.questions.sort((a, b) => a.like_count > b.like_count ? -1 : 1).map(question =>
-                                        <ul key={question.id}>
-                                            <QuestionCard session={this.props.session} handleUpdateQuestions={this.props.handleUpdateQuestions} question={question}/>
-                                        </ul>
+                                    {this.props.questions.sort((a, b) => a.like_count > b.like_count ? -1 : 1).map(question => {
+                                        if (question.answered == 1) {
+                                            return(
+                                            <ul key={question.id}>
+                                                <QuestionCard session={this.props.session} handleUpdateQuestions={this.props.handleUpdateQuestions} question={question} />
+                                            </ul>
+                                            )
+                                        }
+                                    }
                                     )}
                                 </CardContent>
                             </Card>

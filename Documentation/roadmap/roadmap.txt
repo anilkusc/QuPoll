@@ -6,9 +6,11 @@ Frontend
 +    Users modal
 +    Sessions page
 +    Sessions modal
-    session based questions
-    Answered icon for set question to answered
-    Session Name should be write on the Navbar
++    session based questions
++    seperate answered and waiting questions
++    set answered state to a question
+     edit like button
+     auto login,auto set session etc.
 Backend
-    Middleware authentication
-    create API's
+    Middlewares
+    authentication-authorization
