@@ -40,7 +40,7 @@ class Questions extends React.Component {
                                         if (question.answered == 0) {
                                             return(
                                             <ul key={question.id}>
-                                                <QuestionCard session={this.props.session} handleUpdateQuestions={this.props.handleUpdateQuestions} question={question} />
+                                                <QuestionCard authenticated={this.props.authenticated} session={this.props.session} handleUpdateQuestions={this.props.handleUpdateQuestions} question={question} />
                                             </ul>)
                                         }
                                     }
@@ -59,7 +59,7 @@ class Questions extends React.Component {
                                         if (question.answered == 1) {
                                             return(
                                             <ul key={question.id}>
-                                                <QuestionCard session={this.props.session} handleUpdateQuestions={this.props.handleUpdateQuestions} question={question} />
+                                                <QuestionCard authenticated={this.props.authenticated} session={this.props.session} handleUpdateQuestions={this.props.handleUpdateQuestions} question={question} />
                                             </ul>
                                             )
                                         }

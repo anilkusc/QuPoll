@@ -56,7 +56,7 @@ class Routes extends React.Component {
           <Navbar handleChangeSession={this.props.handleChangeSession} session={this.props.session} authenticated={this.props.authenticated} handleSetLoggedIn={this.props.handleSetLoggedIn} handleSetLoggedOut={this.props.handleSetLoggedOut} />
           <Switch>
             <Route exact path="/" >
-              <Main session={this.props.session} />
+              <Main session={this.props.session} authenticated={this.props.authenticated} />
             </Route>
             <PrivateRoutes authenticated={this.props.authenticated} />
           </Switch>

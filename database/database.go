@@ -270,7 +270,7 @@ func ReadQuestions(question ...models.Question) ([]models.Question, error) {
 		query = "SELECT * FROM Questions WHERE SessionId=" + strconv.Itoa(question[0].Session.Id)
 
 	} else if len(question) == 1 {
-		query = "SELECT * FROM Questions where id=" + strconv.Itoa(question[0].Id) + " AND SessionId=" + strconv.Itoa(question[0].Session.Id)
+		query = "SELECT * FROM Questions where id='" + strconv.Itoa(question[0].Id) + "'"
 	} else {
 		err := errors.New("There is more than 1 arguments")
 		return nil, err

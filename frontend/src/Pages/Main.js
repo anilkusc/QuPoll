@@ -29,7 +29,6 @@ class Main extends React.Component {
     fetch('/backend/GetQuestions', requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data[0].answered)
         if (data != null) {
           this.setState({questions:data})
         } else {
@@ -74,7 +73,7 @@ class Main extends React.Component {
       <div>
         <br></br>
         <AskQuestion session={this.props.session} handleUpdateQuestions={this.handleUpdateQuestions} />
-        <Questions session={this.props.session} handleUpdateQuestions={this.handleUpdateQuestions} questions={this.state.questions} />
+        <Questions authenticated={this.props.authenticated} session={this.props.session} handleUpdateQuestions={this.handleUpdateQuestions} questions={this.state.questions} />
       </div>
     );
   }

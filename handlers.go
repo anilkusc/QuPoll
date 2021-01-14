@@ -157,7 +157,45 @@ func LikeQuestion(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, `Error updating question on database`)
 		return
 	}
-	var session = models.Session{Id: question.Session.Id}
+	var session = models.Session{Id: willBeUpdatedQuestion[0].Session.Id}
+	questions, err := database.GetQuestions(session)
+	if err != nil {
+		log.Println("Cannot Read Questions")
+		io.WriteString(w, `Cannot Read Questions`)
+		return
+	}
+	returnValue, err := json.Marshal(questions)
+	if err != nil {
+		log.Println("Error marshalling questions")
+		io.WriteString(w, `Error marshalling questions`)
+		return
+	}
+	io.WriteString(w, string(returnValue))
+	return
+}
+func UnlikeQuestion(w http.ResponseWriter, r *http.Request) {
+	var question models.Question
+	err := json.NewDecoder(r.Body).Decode(&question)
+	if err != nil {
+		log.Println("Error decoding json on LikeQuestion")
+		io.WriteString(w, `Error decoding json on LikeQuestion`)
+		return
+	}
+	willBeUpdatedQuestion, err := database.ReadQuestions(question)
+	if err != nil {
+		log.Println("Error getting question from database")
+		io.WriteString(w, `Error getting question from database`)
+		return
+	}
+	willBeUpdatedQuestion[0].LikeCount = willBeUpdatedQuestion[0].LikeCount - 1
+
+	_, err = database.UpdateQuestion(willBeUpdatedQuestion[0])
+	if err != nil {
+		log.Println("Error updating question on database")
+		io.WriteString(w, `Error updating question on database`)
+		return
+	}
+	var session = models.Session{Id: willBeUpdatedQuestion[0].Session.Id}
 	questions, err := database.GetQuestions(session)
 	if err != nil {
 		log.Println("Cannot Read Questions")
@@ -414,6 +452,47 @@ func UpdateSession(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("Error marshalling sessions")
 		io.WriteString(w, `Error marshalling sessions`)
+		return
+	}
+	io.WriteString(w, string(returnValue))
+	return
+}
+func AnswerQuestion(w http.ResponseWriter, r *http.Request) {
+	var question models.Question
+	err := json.NewDecoder(r.Body).Decode(&question)
+	if err != nil {
+		log.Println("Error decoding json on AnswerQuestion")
+		io.WriteString(w, `Error decoding json on AnswerQuestion`)
+		return
+	}
+	willBeUpdatedQuestion, err := database.ReadQuestions(question)
+	if err != nil {
+		log.Println("Error getting question from database")
+		io.WriteString(w, `Error getting question from database`)
+		return
+	}
+	if willBeUpdatedQuestion[0].Answered == 0 {
+		willBeUpdatedQuestion[0].Answered = 1
+	} else {
+		willBeUpdatedQuestion[0].Answered = 0
+	}
+	_, err = database.UpdateQuestion(willBeUpdatedQuestion[0])
+	if err != nil {
+		log.Println("Error updating question on database")
+		io.WriteString(w, `Error updating question on database`)
+		return
+	}
+	var session = models.Session{Id: willBeUpdatedQuestion[0].Session.Id}
+	questions, err := database.GetQuestions(session)
+	if err != nil {
+		log.Println("Cannot Read Questions")
+		io.WriteString(w, `Cannot Read Questions`)
+		return
+	}
+	returnValue, err := json.Marshal(questions)
+	if err != nil {
+		log.Println("Error marshalling questions")
+		io.WriteString(w, `Error marshalling questions`)
 		return
 	}
 	io.WriteString(w, string(returnValue))

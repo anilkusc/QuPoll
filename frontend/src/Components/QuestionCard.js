@@ -7,44 +7,90 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import FaceIcon from '@material-ui/icons/Face';
-import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
+import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
 import DateRangeIcon from '@material-ui/icons/DateRange';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 class QuestionCard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            liked: false,
         };
         this.handleLikeQuestion = this.handleLikeQuestion.bind(this);
-        
+        this.handleAnswerQuestion = this.handleAnswerQuestion.bind(this);
+
     }
 
     handleLikeQuestion() {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: "{\"session\":{\"id\":"+this.props.session+"},\"id\":"+this.props.question.id+"}",
+            body: "{\"session\":{\"id\":" + this.props.session + "},\"id\":" + this.props.question.id + "}",
         };
-        if (this.props.question.id == null || this.props.question.id == ""){
+        if (this.props.question.id == null || this.props.question.id == "") {
             alert("id is not defined")
             return
         }
-        /*if (this.props.session == null || this.props.session == ""){
-            alert("session is not defined")
+        if (this.state.liked) {
+            fetch('/backend/UnlikeQuestion', requestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    this.setState({ liked: !this.state.liked })
+                    this.props.handleUpdateQuestions(data)
+                })
+                .catch(error => {
+                    console.log("Error ========>", error);
+                    alert("There is error while unlike question")
+                })
+        } else {
+            fetch('/backend/LikeQuestion', requestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    this.setState({ liked: !this.state.liked })
+                    this.props.handleUpdateQuestions(data)
+                })
+                .catch(error => {
+                    console.log("Error ========>", error);
+                    alert("There is error while like question")
+                })
+        }
+
+    }
+    handleAnswerQuestion() {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: "{\"session\":{\"id\":" + this.props.session + "},\"id\":" + this.props.question.id + "}",
+        };
+        if (this.props.question.id == null || this.props.question.id == "") {
+            alert("id is not defined")
             return
-        }*/
-        fetch('/backend/LikeQuestion', requestOptions)
+        }
+
+        fetch('/backend/AnswerQuestion', requestOptions)
             .then(response => response.json())
             .then(data => {
+
                 this.props.handleUpdateQuestions(data)
             })
             .catch(error => {
                 console.log("Error ========>", error);
-                alert("There is error while like question")
+                alert("There is error while answer question")
             })
     }
     render() {
-        
+        var answered
+        var like
+        if (this.props.authenticated) {
+            answered = <IconButton aria-label="add to favorites"> <SwapHorizIcon onClick={this.handleAnswerQuestion} color="primary" /></IconButton>
+        }
+        if (this.state.liked) {
+            like = <IconButton aria-label="add to favorites"><FavoriteIcon onClick={this.handleLikeQuestion} color="secondary" />{this.props.question.like_count}&nbsp;</IconButton>
+        } else {
+            like = <IconButton aria-label="add to favorites"><FavoriteBorderIcon onClick={this.handleLikeQuestion} color="secondary" />{this.props.question.like_count}&nbsp;</IconButton>
+        }
+
         return (
             <div>
                 <Card>
@@ -54,25 +100,20 @@ class QuestionCard extends React.Component {
                         </Typography>
                     </CardContent>
                     <CardContent>
-                            {this.props.question.question}
+                        {this.props.question.question}
                     </CardContent>
                     <CardActions disableSpacing>
-                        <div hidden>
-                            <IconButton aria-label="add to favorites">
-                                <DoneOutlineIcon color="primary" />
-                               &nbsp;
-                        </IconButton>
-                        </div>
-                        <IconButton aria-label="add to favorites">
-                            <FavoriteIcon onClick={this.handleLikeQuestion} color="secondary" />
-                            {this.props.question.like_count}
-                          &nbsp;
-                         </IconButton>
+                        {like}
                         <FaceIcon />
                         {this.props.question.asker} &nbsp;
                         <DateRangeIcon />
                           &nbsp;
                            |{this.props.question.date}|
+                           &nbsp;
+                           <IconButton >
+                            {answered}
+                        </IconButton>
+                               &nbsp;
                     </CardActions>
                 </Card>
             </div>
