@@ -109,7 +109,7 @@ func ReadSessions(session ...models.Session) ([]models.Session, error) {
 		if session[0].Id == 0 {
 			query = "SELECT * FROM Sessions where Name='" + session[0].Name + "'"
 		} else {
-			query = "SELECT * FROM Sessions where Name='" + strconv.Itoa(session[0].Id) + "'"
+			query = "SELECT * FROM Sessions where Id='" + strconv.Itoa(session[0].Id) + "'"
 		}
 	} else {
 		err := errors.New("There is more than 1 arguments")
@@ -267,15 +267,16 @@ func CreateQuestion(question models.Question) (models.Question, error) {
 func ReadQuestions(question ...models.Question) ([]models.Question, error) {
 	var query string
 	if len(question) < 1 {
-		query = "SELECT * FROM Questions"
+		query = "SELECT * FROM Questions WHERE SessionId=" + strconv.Itoa(question[0].Session.Id)
 
 	} else if len(question) == 1 {
-		query = "SELECT * FROM Questions where id=" + strconv.Itoa(question[0].Id)
+		query = "SELECT * FROM Questions where id=" + strconv.Itoa(question[0].Id) + " AND SessionId=" + strconv.Itoa(question[0].Session.Id)
 	} else {
 		err := errors.New("There is more than 1 arguments")
 		return nil, err
 	}
 
+	//query = "SELECT * FROM Questions where SessionId=" + strconv.Itoa(session.Id)
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
@@ -323,4 +324,59 @@ func DeleteQuestions(questions []models.Question) ([]models.Question, error) {
 		statement.Close()
 	}
 	return questions, nil
+}
+
+///////////////////////////////////
+func GetQuestions(session models.Session) ([]models.Question, error) {
+	var query string
+	query = "SELECT * FROM Questions where SessionId=" + strconv.Itoa(session.Id)
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var questions []models.Question
+
+	for rows.Next() {
+		var question models.Question
+		err := rows.Scan(&question.Id, &question.Asker, &question.Date, &question.Session.Id, &question.Question, &question.LikeCount, &question.Answered, &question.Approved)
+		if err != nil {
+			return nil, err
+		}
+
+		questions = append(questions, question)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return questions, nil
+}
+func ChangeSession(session models.Session) (models.Session, error) {
+
+	query := "SELECT * FROM Sessions where Id='" + strconv.Itoa(session.Id) + "'"
+
+	rows, err := db.Query(query)
+	if err != nil {
+		return session, err
+	}
+	defer rows.Close()
+
+	var sessions []models.Session
+
+	for rows.Next() {
+		var tempSession models.Session
+		err := rows.Scan(&tempSession.Id, &tempSession.Name, &tempSession.Password, &tempSession.UserVoteCount, &tempSession.TotalVoteCount)
+		if err != nil {
+			return session, err
+		}
+
+		sessions = append(sessions, tempSession)
+	}
+	if err = rows.Err(); err != nil {
+		return session, err
+	}
+
+	return sessions[0], nil
 }

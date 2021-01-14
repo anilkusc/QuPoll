@@ -6,7 +6,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  //Redirect,
+  Redirect,
   //Link
 } from "react-router-dom";
 import Navbar from './Components/Navbar';
@@ -14,11 +14,17 @@ import Navbar from './Components/Navbar';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { authenticated: false, };
+    this.state = {
+      authenticated: false,
+      session: null,
+    };
     this.handleSetLoggedIn = this.handleSetLoggedIn.bind(this);
     this.handleSetLoggedOut = this.handleSetLoggedOut.bind(this);
+    this.handleChangeSession = this.handleChangeSession.bind(this);
   }
-
+  handleChangeSession(Id) {
+    this.setState({ session: Id });
+  }
   handleSetLoggedIn() {
     this.setState({ authenticated: true });
   }
@@ -26,9 +32,10 @@ class App extends React.Component {
     this.setState({ authenticated: false });
   }
   render() {
+
     return (
       <div>
-        <Routes authenticated={this.state.authenticated} handleSetLoggedIn={this.handleSetLoggedIn} handleSetLoggedOut={this.handleSetLoggedOut} />
+        <Routes refresh={this.state.refresh} handleChangeSession={this.handleChangeSession} session={this.state.session} authenticated={this.state.authenticated} handleSetLoggedIn={this.handleSetLoggedIn} handleSetLoggedOut={this.handleSetLoggedOut} />
       </div>
     );
   }
@@ -43,17 +50,18 @@ class Routes extends React.Component {
   }
 
   render() {
-    return (
-      <Router>
-        <Navbar authenticated={this.props.authenticated} handleSetLoggedIn={this.props.handleSetLoggedIn} handleSetLoggedOut={this.props.handleSetLoggedOut} />
-        <Switch>
-          <Route exact path="/" >
-            <Main />
-          </Route>
-          <PrivateRoutes authenticated={this.props.authenticated}/>
-        </Switch>
-      </Router>
-    );
+
+      return (
+        <Router>
+          <Navbar handleChangeSession={this.props.handleChangeSession} session={this.props.session} authenticated={this.props.authenticated} handleSetLoggedIn={this.props.handleSetLoggedIn} handleSetLoggedOut={this.props.handleSetLoggedOut} />
+          <Switch>
+            <Route exact path="/" >
+              <Main session={this.props.session} />
+            </Route>
+            <PrivateRoutes authenticated={this.props.authenticated} />
+          </Switch>
+        </Router>
+      );
   }
 }
 

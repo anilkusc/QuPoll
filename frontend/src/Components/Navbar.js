@@ -87,7 +87,7 @@ class Navbar extends React.Component {
                         >
                             <div className={classes.modal}>
                                 <Button onClick={this.handleCloseChangeSession}><CloseIcon /></Button>
-                                <ChangeSession />
+                                <ChangeSession handleCloseChangeSession={this.handleCloseChangeSession} handleChangeSession={this.props.handleChangeSession} />
                             </div>
                         </Modal>
                         <Linked variant="button" color="textPrimary" href="#" className={classes.link} onClick={this.handleOpenChangeSession}>

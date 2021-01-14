@@ -37,7 +37,6 @@ class SignOut extends React.Component {
         fetch('/backend/Logout', requestOptions)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 this.props.handleSetLoggedOut()
                 this.props.handleCloseLogin()
             })

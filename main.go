@@ -42,6 +42,7 @@ func main() {
 	r.HandleFunc("/backend/CreateSession", CreateSession).Methods("POST")
 	r.HandleFunc("/backend/DeleteSession", DeleteSession).Methods("POST")
 	r.HandleFunc("/backend/UpdateSession", UpdateSession).Methods("POST")
+	r.HandleFunc("/backend/ChangeSession", ChangeSession).Methods("POST")
 
 	fmt.Println("Serving on:8080")
 	if *https == true {

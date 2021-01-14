@@ -13,7 +13,6 @@ class AskQuestion extends React.Component {
         this.state = {
             asker: "",
             question: "",
-            session: 1,
         }
         this.handleChangeAsker = this.handleChangeAsker.bind(this);
         this.handleChangeQuestion = this.handleChangeQuestion.bind(this);
@@ -31,12 +30,11 @@ class AskQuestion extends React.Component {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: "{\"session\":{\"id\":"+this.state.session+"},\"asker\":\""+ this.state.asker +"\",\"question\":\""+this.state.question+"\"}",
+            body: "{\"session\":{\"id\":"+this.props.session+"},\"asker\":\""+ this.state.asker +"\",\"question\":\""+this.state.question+"\"}",
         };
         fetch('/backend/AskQuestion', requestOptions)
             .then(response => response.json())
             .then(data => {
-                //this.setState({asker: "",question: ""})
                 this.props.handleUpdateQuestions(data)
             })
             .catch(error => {

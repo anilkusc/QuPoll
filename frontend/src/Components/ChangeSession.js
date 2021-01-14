@@ -33,31 +33,27 @@ class ChangeSession extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      sessionName: "",
-      password: "",
+      sessionId: null,
     };
-    this.handleChangeSessionName = this.handleChangeSessionName.bind(this);
-    this.handleChangePassword = this.handleChangePassword.bind(this);
+    this.handleChangeSessionId = this.handleChangeSessionId.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  handleChangeSessionName(event) {
-    this.setState({ sessionName: event.target.value });
-  }
-  handleChangePassword(event) {
-    this.setState({ password: event.target.value });
+  handleChangeSessionId(event) {
+    this.setState({ sessionId: event.target.value });
   }
   handleSubmit(event) {
     event.preventDefault();
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: "{\"session_name\":\"" + this.state.sessionName + "\",\"password\":\"" + this.state.password + "\"}",
+      body: "{\"id\": "+ this.state.sessionId  + "}",
     };
     fetch('/backend/ChangeSession', requestOptions)
       .then(response => response.json())
       .then(data => {
-        if (data.session_name != null) {
-            this.setState({sessionName:data.session_name})
+        if (data.id != null) {
+            this.props.handleChangeSession(data.id)
+            this.props.handleCloseChangeSession()
         }else{
             alert("Error While Setting Session")
         }
@@ -87,23 +83,11 @@ class ChangeSession extends React.Component {
                 required
                 fullWidth
                 id="text"
-                label="Session Name"
-                name="sessionName"
-                autoComplete="sessionname"
-                onChange={this.handleChangeSessionName}
+                label="Session Id"
+                name="sessionId"
+                autoComplete="sessionid"
+                onChange={this.handleChangeSessionId}
                 autoFocus
-              />
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                onChange={this.handleChangePassword}
               />
               <Button
                 type="submit"

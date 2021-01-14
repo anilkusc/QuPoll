@@ -95,7 +95,9 @@ func AskQuestion(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, `Error writing question to database`)
 		return
 	}
-	questions, err := database.ReadQuestions()
+	session := models.Session{Id: question.Session.Id}
+
+	questions, err := database.GetQuestions(session)
 	if err != nil {
 		log.Println("Cannot Read Questions")
 		io.WriteString(w, `Cannot Read Questions`)
@@ -111,7 +113,14 @@ func AskQuestion(w http.ResponseWriter, r *http.Request) {
 	return
 }
 func GetQuestions(w http.ResponseWriter, r *http.Request) {
-	questions, err := database.ReadQuestions()
+	var session models.Session
+	err := json.NewDecoder(r.Body).Decode(&session)
+	if err != nil {
+		log.Println("Error decoding json on GetQuestions")
+		io.WriteString(w, `Error decoding json on GetQuestions`)
+		return
+	}
+	questions, err := database.GetQuestions(session)
 	if err != nil {
 		log.Println("Error getting questions from database")
 		io.WriteString(w, `Error getting questions from database`)
@@ -148,7 +157,8 @@ func LikeQuestion(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, `Error updating question on database`)
 		return
 	}
-	questions, err := database.ReadQuestions()
+	var session = models.Session{Id: question.Session.Id}
+	questions, err := database.GetQuestions(session)
 	if err != nil {
 		log.Println("Cannot Read Questions")
 		io.WriteString(w, `Cannot Read Questions`)
@@ -288,6 +298,30 @@ func GetSessions(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("Error marshalling users")
 		io.WriteString(w, `Error marshalling users`)
+		return
+	}
+	io.WriteString(w, string(returnValue))
+	return
+}
+func ChangeSession(w http.ResponseWriter, r *http.Request) {
+	var session models.Session
+	err := json.NewDecoder(r.Body).Decode(&session)
+	if err != nil {
+		log.Println("Error decoding json on ChangeSession")
+		io.WriteString(w, `Error decoding json on ChangeSession`)
+		return
+	}
+
+	returnSession, err := database.ChangeSession(session)
+	if err != nil {
+		log.Println("Error getting sessions from database")
+		io.WriteString(w, `Error getting sessions from database`)
+		return
+	}
+	returnValue, err := json.Marshal(returnSession)
+	if err != nil {
+		log.Println("Error marshalling session")
+		io.WriteString(w, `Error marshalling session`)
 		return
 	}
 	io.WriteString(w, string(returnValue))

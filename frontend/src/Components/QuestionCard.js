@@ -16,19 +16,23 @@ class QuestionCard extends React.Component {
         this.state = {
         };
         this.handleLikeQuestion = this.handleLikeQuestion.bind(this);
+        
     }
 
     handleLikeQuestion() {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: "{\"session\":{\"id\":1},\"id\":"+this.props.question.id+"}",
+            body: "{\"session\":{\"id\":"+this.props.session+"},\"id\":"+this.props.question.id+"}",
         };
         if (this.props.question.id == null || this.props.question.id == ""){
-            console.log(this.props.question)
             alert("id is not defined")
             return
         }
+        /*if (this.props.session == null || this.props.session == ""){
+            alert("session is not defined")
+            return
+        }*/
         fetch('/backend/LikeQuestion', requestOptions)
             .then(response => response.json())
             .then(data => {
@@ -40,6 +44,7 @@ class QuestionCard extends React.Component {
             })
     }
     render() {
+        
         return (
             <div>
                 <Card>
@@ -47,6 +52,9 @@ class QuestionCard extends React.Component {
                         <Typography variant="body2" color="textSecondary" component="p">
                             <b>{this.props.question.id}</b>
                         </Typography>
+                    </CardContent>
+                    <CardContent>
+                            {this.props.question.question}
                     </CardContent>
                     <CardActions disableSpacing>
                         <div hidden>
