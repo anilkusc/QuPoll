@@ -36,7 +36,6 @@ class Questions extends React.Component {
                                 />
                                 <CardContent>
                                     {this.props.questions.sort((a, b) => a.like_count > b.like_count ? -1 : 1).map(question => {
-                                        console.log(question.answered)
                                         if (question.answered == 0) {
                                             return(
                                             <ul key={question.id}>

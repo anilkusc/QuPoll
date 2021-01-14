@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/anilkusc/QuPoll/database"
@@ -113,6 +114,7 @@ func AskQuestion(w http.ResponseWriter, r *http.Request) {
 	return
 }
 func GetQuestions(w http.ResponseWriter, r *http.Request) {
+	currentSession, _ := store.Get(r, "session-name")
 	var session models.Session
 	err := json.NewDecoder(r.Body).Decode(&session)
 	if err != nil {
@@ -120,6 +122,8 @@ func GetQuestions(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, `Error decoding json on GetQuestions`)
 		return
 	}
+	currentSession.Values["session"] = session.Id
+	currentSession.Save(r, w)
 	questions, err := database.GetQuestions(session)
 	if err != nil {
 		log.Println("Error getting questions from database")
@@ -356,6 +360,9 @@ func ChangeSession(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, `Error getting sessions from database`)
 		return
 	}
+	currentSession, _ := store.Get(r, "session-name")
+	currentSession.Values["session"] = returnSession.Id
+	currentSession.Save(r, w)
 	returnValue, err := json.Marshal(returnSession)
 	if err != nil {
 		log.Println("Error marshalling session")
@@ -497,4 +504,18 @@ func AnswerQuestion(w http.ResponseWriter, r *http.Request) {
 	}
 	io.WriteString(w, string(returnValue))
 	return
+}
+
+//
+func CurrentSession(w http.ResponseWriter, r *http.Request) {
+	currentSession, _ := store.Get(r, "session-name")
+	if currentSession.Values["session"] == nil || currentSession.Values["session"] == "" {
+		io.WriteString(w, `-1`)
+		return
+	} else {
+		returnValue := strconv.Itoa(currentSession.Values["session"].(int))
+		io.WriteString(w, string(returnValue))
+		return
+	}
+
 }

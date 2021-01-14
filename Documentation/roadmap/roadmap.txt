@@ -9,8 +9,10 @@ Frontend
 +    session based questions
 +    seperate answered and waiting questions
 +    set answered state to a question
-+     edit like button
-     auto login,auto set session etc.
++    edit like button
++    auto set session
+     auto login
+
 Backend
     Middlewares
     authentication-authorization

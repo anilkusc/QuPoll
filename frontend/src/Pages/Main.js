@@ -9,28 +9,69 @@ class Main extends React.Component {
       questions: [],
     }
     this.handleUpdateQuestions = this.handleUpdateQuestions.bind(this);
+    this.setSession = this.setSession.bind(this);
   }
-  componentDidMount() {
+
+
+  setSession() {
     var session = this.props.session
     if (session == null) {
-      var getSession = prompt("Please enter session id", "1");
-      if (getSession != null && getSession != "" && getSession > -1) {
-        session = getSession
-      } else {
-        alert("Invalid Session Id!")
-        return
-      }
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      };
+      fetch('/backend/CurrentSession', requestOptions)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data == "-1") {
+            var getSession = prompt("Please enter session id", "1");
+            if (getSession != null && getSession != "" && getSession > -1) {
+              session = getSession
+            } else {
+              alert("Invalid Session Id!")
+              return
+            }
+
+          } else {
+            session = data
+          }
+          const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: "{\"id\":" + session + "}"
+          };
+          fetch('/backend/ChangeSession', requestOptions)
+            .then(response => response.json())
+            .then(data => {
+              if (data.id != null) {
+                this.props.handleChangeSession(data.id)
+              } else {
+                alert("Error While Setting Session")
+              }
+            })
+            .catch(error => {
+              console.log("Error ========>", error);
+              alert("Error While Setting Session")
+            })
+        })
     }
+    return session
+  }
+
+  componentDidMount() {
+
+    var session = this.setSession()
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: "{\"id\":" + session + "}"
     };
+
     fetch('/backend/GetQuestions', requestOptions)
       .then((response) => response.json())
       .then((data) => {
         if (data != null) {
-          this.setState({questions:data})
+          this.setState({ questions: data })
         } else {
           alert("There is no question on this session ")
         }
@@ -41,6 +82,7 @@ class Main extends React.Component {
       })
 
   }
+
   componentDidUpdate(prevProps) {
     if (this.props.session !== prevProps.session) {
       const requestOptions = {
@@ -52,7 +94,7 @@ class Main extends React.Component {
         .then((response) => response.json())
         .then((data) => {
 
-          if (data != null) {            
+          if (data != null) {
             this.setState({ questions: data })
           } else {
             this.setState({ questions: [] })
