@@ -46,6 +46,7 @@ func main() {
 	r.HandleFunc("/backend/ChangeSession", ChangeSession).Methods("POST")
 	r.HandleFunc("/backend/AnswerQuestion", Authz(AnswerQuestion)).Methods("POST")
 	r.HandleFunc("/backend/CurrentSession", CurrentSession).Methods("POST")
+	r.HandleFunc("/backend/AutoLogin", AutoLogin).Methods("POST")
 
 	fmt.Println("Serving on:8080")
 	if *https == true {

@@ -22,7 +22,24 @@ class App extends React.Component {
     this.handleSetLoggedOut = this.handleSetLoggedOut.bind(this);
     this.handleChangeSession = this.handleChangeSession.bind(this);
   }
+  componentDidMount() {
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    };
 
+    fetch('/backend/AutoLogin', requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data == 1) {
+          this.setState({ authenticated: true })
+        }
+      })
+      .catch(error => {
+        console.log("Error ========>", error);
+        alert("There is error while autologin")
+      })
+  }
   handleChangeSession(Id) {
     this.setState({ session: Id });
   }
@@ -52,17 +69,17 @@ class Routes extends React.Component {
 
   render() {
 
-      return (
-        <Router>
-          <Navbar handleChangeSession={this.props.handleChangeSession} session={this.props.session} authenticated={this.props.authenticated} handleSetLoggedIn={this.props.handleSetLoggedIn} handleSetLoggedOut={this.props.handleSetLoggedOut} />
-          <Switch>
-            <Route exact path="/" >
-              <Main handleChangeSession={this.props.handleChangeSession} session={this.props.session} authenticated={this.props.authenticated} />
-            </Route>
-            <PrivateRoutes authenticated={this.props.authenticated} />
-          </Switch>
-        </Router>
-      );
+    return (
+      <Router>
+        <Navbar handleChangeSession={this.props.handleChangeSession} session={this.props.session} authenticated={this.props.authenticated} handleSetLoggedIn={this.props.handleSetLoggedIn} handleSetLoggedOut={this.props.handleSetLoggedOut} />
+        <Switch>
+          <Route exact path="/" >
+            <Main handleChangeSession={this.props.handleChangeSession} session={this.props.session} authenticated={this.props.authenticated} />
+          </Route>
+          <PrivateRoutes authenticated={this.props.authenticated} />
+        </Switch>
+      </Router>
+    );
   }
 }
 

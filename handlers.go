@@ -75,6 +75,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session-name")
 	session.Values["authenticated"] = "false"
 	session.Values["role"] = ""
+	//session.Options.MaxAge = -1
 	session.Save(r, w)
 	io.WriteString(w, `{"authenticated":"false"}`)
 	return
@@ -506,7 +507,6 @@ func AnswerQuestion(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-//
 func CurrentSession(w http.ResponseWriter, r *http.Request) {
 	currentSession, _ := store.Get(r, "session-name")
 	if currentSession.Values["session"] == nil || currentSession.Values["session"] == "" {
@@ -515,6 +515,18 @@ func CurrentSession(w http.ResponseWriter, r *http.Request) {
 	} else {
 		returnValue := strconv.Itoa(currentSession.Values["session"].(int))
 		io.WriteString(w, string(returnValue))
+		return
+	}
+
+}
+func AutoLogin(w http.ResponseWriter, r *http.Request) {
+	currentSession, _ := store.Get(r, "session-name")
+
+	if currentSession.Values["authenticated"].(string) == "true" {
+		io.WriteString(w, `1`)
+		return
+	} else {
+		io.WriteString(w, `0`)
 		return
 	}
 

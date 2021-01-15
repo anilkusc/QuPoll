@@ -48,7 +48,6 @@ class ChangeSession extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: "{\"id\": "+ this.state.sessionId  + "}",
     };
-    console.log(requestOptions)
     fetch('/backend/ChangeSession', requestOptions)
       .then(response => response.json())
       .then(data => {
