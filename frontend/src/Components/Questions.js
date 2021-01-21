@@ -24,7 +24,7 @@ class Questions extends React.Component {
     render() {
         const { classes } = this.props;
         const checkQuestions = true;
-        if (this.props.questions != null) {
+        if (this.props.questions != null && this.props.questions != "" ) {
             const checkQuestions = true;
         } else {
             const checkQuestions = false;
