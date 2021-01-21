@@ -23,6 +23,12 @@ class Questions extends React.Component {
     }
     render() {
         const { classes } = this.props;
+        const checkQuestions = true;
+        if (this.props.questions != null) {
+            const checkQuestions = true;
+        } else {
+            const checkQuestions = false;
+        }
 
         return (
             <div >
@@ -35,15 +41,20 @@ class Questions extends React.Component {
                                     className={classes.cardHeader}
                                 />
                                 <CardContent>
-                                    {this.props.questions.sort((a, b) => a.like_count > b.like_count ? -1 : 1).map(question => {
-                                        if (question.answered == 0) {
-                                            return(
-                                            <ul key={question.id}>
-                                                <QuestionCard authenticated={this.props.authenticated} session={this.props.session} handleUpdateQuestions={this.props.handleUpdateQuestions} question={question} />
-                                            </ul>)
-                                        }
+                                    {checkQuestions ? (
+                                        this.props.questions.sort((a, b) => a.like_count > b.like_count ? -1 : 1).map(question => {
+                                            if (question.answered == 0) {
+                                                return (
+                                                    <ul key={question.id}>
+                                                        <QuestionCard authenticated={this.props.authenticated} session={this.props.session} handleUpdateQuestions={this.props.handleUpdateQuestions} question={question} />
+                                                    </ul>)
+                                            }
+                                        })
+                                    ) : (
+                                            <div>There is no questions</div>
+                                        )
+
                                     }
-                                    )}
                                 </CardContent>
                             </Card>
                         </Grid>
@@ -54,16 +65,22 @@ class Questions extends React.Component {
                                     className={classes.cardHeader}
                                 />
                                 <CardContent>
-                                    {this.props.questions.sort((a, b) => a.like_count > b.like_count ? -1 : 1).map(question => {
-                                        if (question.answered == 1) {
-                                            return(
-                                            <ul key={question.id}>
-                                                <QuestionCard authenticated={this.props.authenticated} session={this.props.session} handleUpdateQuestions={this.props.handleUpdateQuestions} question={question} />
-                                            </ul>
+                                    {
+                                        checkQuestions ? (
+                                            this.props.questions.sort((a, b) => a.like_count > b.like_count ? -1 : 1).map(question => {
+                                                if (question.answered == 1) {
+                                                    return (
+                                                        <ul key={question.id}>
+                                                            <QuestionCard authenticated={this.props.authenticated} session={this.props.session} handleUpdateQuestions={this.props.handleUpdateQuestions} question={question} />
+                                                        </ul>
+                                                    )
+                                                }
+                                            }
                                             )
-                                        }
+                                        ) : (
+                                            <div>There is no questions</div>
+                                        )
                                     }
-                                    )}
                                 </CardContent>
                             </Card>
                         </Grid>
