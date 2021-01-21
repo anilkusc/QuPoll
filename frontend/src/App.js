@@ -1,6 +1,7 @@
 import React from 'react';
 import Main from './Pages/Main'
 import Users from './Pages/Users'
+import Approve from './Pages/Approve'
 import Sessions from './Pages/Sessions'
 import {
   BrowserRouter as Router,
@@ -34,10 +35,6 @@ class App extends React.Component {
         if (data == 1) {
           this.setState({ authenticated: true })
         }
-      })
-      .catch(error => {
-        console.log("Error ========>", error);
-        alert("There is error while autologin")
       })
   }
   handleChangeSession(Id) {
@@ -76,7 +73,7 @@ class Routes extends React.Component {
           <Route exact path="/" >
             <Main handleChangeSession={this.props.handleChangeSession} session={this.props.session} authenticated={this.props.authenticated} />
           </Route>
-          <PrivateRoutes authenticated={this.props.authenticated} />
+          <PrivateRoutes handleChangeSession={this.props.handleChangeSession} session={this.props.session} authenticated={this.props.authenticated} />
         </Switch>
       </Router>
     );
@@ -90,6 +87,9 @@ class PrivateRoutes extends React.Component {
         <div>
           <Route exact path="/Users" >
             <Users />
+          </Route>
+          <Route exact path="/Approve" >
+            <Approve session={this.props.session} handleChangeSession={this.props.handleChangeSession} />
           </Route>
           <Route exact path="/Sessions" >
             <Sessions />

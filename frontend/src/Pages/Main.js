@@ -21,8 +21,9 @@ class Main extends React.Component {
         headers: { 'Content-Type': 'application/json' },
       };
       fetch('/backend/CurrentSession', requestOptions)
-        .then((response) => response.json())
+        .then((response) => response.text())
         .then((data) => {
+          debugger;
           if (data == "-1") {
             var getSession = prompt("Please enter session id", "1");
             if (getSession != null && getSession != "" && getSession > -1) {
@@ -31,10 +32,10 @@ class Main extends React.Component {
               alert("Invalid Session Id!")
               return
             }
-
           } else {
             session = data
           }
+        }).then((temp) => {
           const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -53,7 +54,8 @@ class Main extends React.Component {
               console.log("Error ========>", error);
               alert("Error While Setting Session")
             })
-        })
+        }
+        );
     }
     return session
   }

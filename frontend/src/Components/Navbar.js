@@ -135,6 +135,11 @@ class Private extends React.Component {
         const classes = this.props.classes
         return (
             <div>
+                <Link to="/Approve">
+                    <Linked variant="button" color="textPrimary" to="/Approve" className={classes.link}>
+                        Approve
+                    </Linked>
+                </Link>                
                 <Link to="/">
                     <Linked variant="button" color="textPrimary" to="/" className={classes.link}>
                         Questions
