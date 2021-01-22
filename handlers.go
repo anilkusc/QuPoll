@@ -587,7 +587,6 @@ func AnswerQuestion(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, string(returnValue))
 	return
 }
-
 func CurrentSession(w http.ResponseWriter, r *http.Request) {
 	currentSession, _ := store.Get(r, "session-name")
 	if currentSession.Values["session"] == nil || currentSession.Values["session"] == "" {

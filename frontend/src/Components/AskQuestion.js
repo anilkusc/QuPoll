@@ -18,7 +18,7 @@ class AskQuestion extends React.Component {
         this.handleChangeQuestion = this.handleChangeQuestion.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-    
+
     handleChangeAsker(event) {
         this.setState({ asker: event.target.value });
     }
@@ -30,17 +30,18 @@ class AskQuestion extends React.Component {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: "{\"session\":{\"id\":"+this.props.session+"},\"asker\":\""+ this.state.asker +"\",\"question\":\""+this.state.question+"\"}",
+            body: "{\"session\":{\"id\":" + this.props.session + "},\"asker\":\"" + this.state.asker + "\",\"question\":\"" + this.state.question + "\"}",
         };
         fetch('/backend/AskQuestion', requestOptions)
             .then(response => response.json())
             .then(data => {
                 this.props.handleUpdateQuestions(data)
+                alert("Your Question is Waiting for Approve")
             })
             .catch(error => {
                 console.log("Error ========>", error);
                 alert("There is error while asking question")
-              })
+            })
     }
     render() {
         return (
@@ -49,12 +50,19 @@ class AskQuestion extends React.Component {
                     <Card>
                         <CardContent>
                             <Typography variant="body2" component="p">
-                                <TextField id="standard-basic" label="Username" style={{ margin: 8 }}  onChange={this.handleChangeAsker}/>
+                                <TextField 
+                                id="standard-basic" 
+                                label="Username" 
+                                inputProps={{maxLength: 18,}} 
+                                style={{ margin: 8 }} 
+                                onChange={this.handleChangeAsker} 
+                                />
                                 <TextField
                                     id="standard-full-width"
                                     style={{ margin: 8 }}
                                     placeholder="Ask a Question..."
                                     fullWidth
+                                    inputProps={{maxLength: 240,}}
                                     margin="normal"
                                     onChange={this.handleChangeQuestion}
                                     InputLabelProps={{

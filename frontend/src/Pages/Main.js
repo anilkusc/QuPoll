@@ -23,7 +23,7 @@ class Main extends React.Component {
       fetch('/backend/CurrentSession', requestOptions)
         .then((response) => response.text())
         .then((data) => {
-          debugger;
+         
           if (data == "-1") {
             var getSession = prompt("Please enter session id", "1");
             if (getSession != null && getSession != "" && getSession > -1) {
@@ -69,14 +69,13 @@ class Main extends React.Component {
       body: "{\"id\":" + session + "}"
     };
 
+    
     fetch('/backend/GetQuestions', requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        if (data != null) {
+        if (data != null && data != "") {
           this.setState({ questions: data })
-        } else {
-          alert("There is no question on this session ")
-        }
+        } 
       })
       .catch(error => {
         console.log("Error ========>", error);
@@ -100,6 +99,7 @@ class Main extends React.Component {
             this.setState({ questions: data })
           } else {
             this.setState({ questions: [] })
+           
             alert("There is no question on this session ")
           }
         })

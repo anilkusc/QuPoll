@@ -45,7 +45,7 @@ class Approve extends React.Component {
       fetch('/backend/CurrentSession', requestOptions)
         .then((response) => response.text())
         .then((data) => {
-          debugger;
+          
           if (data == "-1") {
             var getSession = prompt("Please enter session id", "1");
             if (getSession != null && getSession != "" && getSession > -1) {
@@ -98,9 +98,7 @@ class Approve extends React.Component {
       .then((data) => {
         if (data != null) {
           this.setState({ questions: data })
-        } else {
-          alert("There is no question on this session ")
-        }
+        } 
       })
       .catch(error => {
         console.log("Error ========>", error);

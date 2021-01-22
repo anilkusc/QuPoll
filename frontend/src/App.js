@@ -28,14 +28,25 @@ class App extends React.Component {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
     };
-
-    fetch('/backend/AutoLogin', requestOptions)
+    fetch('/backend/CurrentSession', requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        if (data == 1) {
-          this.setState({ authenticated: true })
+        
+        if (data != -1) {
+          this.setState({ session: data })
         }
-      })
+      }).then(
+        fetch('/backend/AutoLogin', requestOptions)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data == 1) {
+              this.setState({ authenticated: true })
+            }
+          })
+      )
+
+
+
   }
   handleChangeSession(Id) {
     this.setState({ session: Id });
