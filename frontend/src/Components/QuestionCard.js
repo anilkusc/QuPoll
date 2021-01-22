@@ -16,6 +16,7 @@ class QuestionCard extends React.Component {
         super(props);
         this.state = {
             liked: false,
+            isButtonDisabled: false
         };
         this.handleLikeQuestion = this.handleLikeQuestion.bind(this);
         this.handleAnswerQuestion = this.handleAnswerQuestion.bind(this);
@@ -55,6 +56,8 @@ class QuestionCard extends React.Component {
                     alert("There is error while like question")
                 })
         }
+        setTimeout(() => this.setState({ isButtonDisabled: false }), 2000);
+        this.setState({ isButtonDisabled: true })
 
     }
     handleAnswerQuestion() {
@@ -83,12 +86,12 @@ class QuestionCard extends React.Component {
         var answered
         var like
         if (this.props.authenticated) {
-            answered = <IconButton aria-label="add to favorites"> <SwapHorizIcon onClick={this.handleAnswerQuestion} color="primary" /></IconButton>
+            answered = <IconButton disabled={this.state.isButtonDisabled} aria-label="add to favorites" onClick={this.handleAnswerQuestion} > <SwapHorizIcon  color="primary" /></IconButton>
         }
         if (this.state.liked) {
-            like = <IconButton aria-label="add to favorites"><FavoriteIcon onClick={this.handleLikeQuestion} color="secondary" />{this.props.question.like_count}&nbsp;</IconButton>
+            like = <IconButton disabled={this.state.isButtonDisabled} aria-label="add to favorites" onClick={this.handleLikeQuestion}><FavoriteIcon  color="secondary" />{this.props.question.like_count}&nbsp;</IconButton>
         } else {
-            like = <IconButton aria-label="add to favorites"><FavoriteBorderIcon onClick={this.handleLikeQuestion} color="secondary" />{this.props.question.like_count}&nbsp;</IconButton>
+            like = <IconButton disabled={this.state.isButtonDisabled} aria-label="add to favorites" onClick={this.handleLikeQuestion}><FavoriteBorderIcon  color="secondary" />{this.props.question.like_count}&nbsp;</IconButton>
         }
 
         return (
