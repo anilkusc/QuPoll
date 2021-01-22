@@ -115,7 +115,7 @@ func AskQuestion(w http.ResponseWriter, r *http.Request) {
 	return
 }
 func GetQuestions(w http.ResponseWriter, r *http.Request) {
-	currentSession, _ := store.Get(r, "session-name")
+	//currentSession, _ := store.Get(r, "session-name")
 	var session models.Session
 	err := json.NewDecoder(r.Body).Decode(&session)
 	if err != nil {
@@ -123,8 +123,8 @@ func GetQuestions(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, `Error decoding json on GetQuestions`)
 		return
 	}
-	currentSession.Values["session"] = session.Id
-	currentSession.Save(r, w)
+	//currentSession.Values["session"] = session.Id
+	//currentSession.Save(r, w)
 	questions, err := database.GetQuestions(session)
 	if err != nil {
 		log.Println("Error getting questions from database")
@@ -423,6 +423,9 @@ func DeleteSession(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, `Cannot Read Sessions`)
 		return
 	}
+	currentSession, _ := store.Get(r, "session-name")
+	currentSession.Values["session"] = 1
+	currentSession.Save(r, w)
 	returnValue, err := json.Marshal(sessions)
 	if err != nil {
 		log.Println("Error marshalling sessions")

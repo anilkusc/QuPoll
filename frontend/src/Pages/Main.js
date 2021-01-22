@@ -23,14 +23,14 @@ class Main extends React.Component {
       fetch('/backend/CurrentSession', requestOptions)
         .then((response) => response.text())
         .then((data) => {
-         
+         debugger;
           if (data == "-1") {
             var getSession = prompt("Please enter session id", "1");
-            if (getSession != null && getSession != "" && getSession > -1) {
+            if (getSession !=  null && getSession != "" && getSession > -1) {
               session = getSession
             } else {
               alert("Invalid Session Id!")
-              return
+              return null
             }
           } else {
             session = data

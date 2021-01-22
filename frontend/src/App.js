@@ -31,7 +31,6 @@ class App extends React.Component {
     fetch('/backend/CurrentSession', requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        
         if (data != -1) {
           this.setState({ session: data })
         }
@@ -103,7 +102,7 @@ class PrivateRoutes extends React.Component {
             <Approve session={this.props.session} handleChangeSession={this.props.handleChangeSession} />
           </Route>
           <Route exact path="/Sessions" >
-            <Sessions />
+            <Sessions handleChangeSession={this.props.handleChangeSession} />
           </Route>
         </div>
       )

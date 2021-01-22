@@ -88,6 +88,7 @@ class Sessions extends React.Component {
         }
       }
     }
+    this.props.handleChangeSession(1)
   }
   handleCloseEdit() {
     this.setState({ openEdit: false })

@@ -36,7 +36,12 @@ class AskQuestion extends React.Component {
             .then(response => response.json())
             .then(data => {
                 this.props.handleUpdateQuestions(data)
+                this.setState({
+                    asker: "",
+                    question: "",
+                })
                 alert("Your Question is Waiting for Approve")
+                
             })
             .catch(error => {
                 console.log("Error ========>", error);
@@ -54,6 +59,7 @@ class AskQuestion extends React.Component {
                                 id="standard-basic" 
                                 label="Username" 
                                 inputProps={{maxLength: 18,}} 
+                                value={this.state.asker}
                                 style={{ margin: 8 }} 
                                 onChange={this.handleChangeAsker} 
                                 />
@@ -65,6 +71,7 @@ class AskQuestion extends React.Component {
                                     inputProps={{maxLength: 240,}}
                                     margin="normal"
                                     onChange={this.handleChangeQuestion}
+                                    value={this.state.question}
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
