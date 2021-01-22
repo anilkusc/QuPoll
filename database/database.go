@@ -303,11 +303,11 @@ func ReadQuestions(question ...models.Question) ([]models.Question, error) {
 
 func UpdateQuestion(question models.Question) (models.Question, error) {
 
-	statement, err := db.Prepare("UPDATE Questions SET Question=? , LikeCount=? , Answered=? where Id=?")
+	statement, err := db.Prepare("UPDATE Questions SET Question=? , LikeCount=? , Answered=? , Approved=? where Id=?")
 	if err != nil {
 		return question, err
 	}
-	statement.Exec(question.Question, question.LikeCount, question.Answered, question.Id)
+	statement.Exec(question.Question, question.LikeCount, question.Answered, question.Approved, question.Id)
 	statement.Close()
 
 	return question, nil

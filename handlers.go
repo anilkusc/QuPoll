@@ -465,6 +465,87 @@ func UpdateSession(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, string(returnValue))
 	return
 }
+func IgnoreQuestion(w http.ResponseWriter, r *http.Request) {
+	var question models.Question
+	var questions []models.Question
+
+	err := json.NewDecoder(r.Body).Decode(&question)
+	if err != nil {
+		log.Println("Error decoding json on IgnoreQuestion")
+		io.WriteString(w, `Error decoding json on IgnoreQuestion`)
+		return
+	}
+	willBeUpdatedQuestion, err := database.ReadQuestions(question)
+	if err != nil {
+		log.Println("Error getting question from database")
+		io.WriteString(w, `Error getting question from database`)
+		return
+	}
+
+	questions = append(questions, question)
+	_, err = database.DeleteQuestions(questions)
+	if err != nil {
+		log.Println("Error getting question from database")
+		io.WriteString(w, `Error getting question from database`)
+		return
+	}
+	var session = models.Session{Id: willBeUpdatedQuestion[0].Session.Id}
+	questions, err = database.GetQuestions(session)
+	if err != nil {
+		log.Println("Cannot Read Questions")
+		io.WriteString(w, `Cannot Read Questions`)
+		return
+	}
+	returnValue, err := json.Marshal(questions)
+	if err != nil {
+		log.Println("Error marshalling questions")
+		io.WriteString(w, `Error marshalling questions`)
+		return
+	}
+	io.WriteString(w, string(returnValue))
+	return
+}
+func ApproveQuestion(w http.ResponseWriter, r *http.Request) {
+	var question models.Question
+	err := json.NewDecoder(r.Body).Decode(&question)
+	if err != nil {
+		log.Println("Error decoding json on ApproveQuestion")
+		io.WriteString(w, `Error decoding json on ApproveQuestion`)
+		return
+	}
+	willBeUpdatedQuestion, err := database.ReadQuestions(question)
+	if err != nil {
+		log.Println("Error getting question from database")
+		io.WriteString(w, `Error getting question from database`)
+		return
+	}
+	if willBeUpdatedQuestion[0].Approved == 0 {
+		willBeUpdatedQuestion[0].Approved = 1
+	} else {
+		willBeUpdatedQuestion[0].Approved = 0
+	}
+	_, err = database.UpdateQuestion(willBeUpdatedQuestion[0])
+	if err != nil {
+		log.Println("Error updating question on database")
+		io.WriteString(w, `Error updating question on database`)
+		return
+	}
+	var session = models.Session{Id: willBeUpdatedQuestion[0].Session.Id}
+	questions, err := database.GetQuestions(session)
+	if err != nil {
+		log.Println("Cannot Read Questions")
+		io.WriteString(w, `Cannot Read Questions`)
+		return
+	}
+	returnValue, err := json.Marshal(questions)
+	if err != nil {
+		log.Println("Error marshalling questions")
+		io.WriteString(w, `Error marshalling questions`)
+		return
+	}
+	io.WriteString(w, string(returnValue))
+	return
+}
 func AnswerQuestion(w http.ResponseWriter, r *http.Request) {
 	var question models.Question
 	err := json.NewDecoder(r.Body).Decode(&question)

@@ -45,6 +45,8 @@ func main() {
 	r.HandleFunc("/backend/UpdateSession", Authz(UpdateSession)).Methods("POST")
 	r.HandleFunc("/backend/ChangeSession", ChangeSession).Methods("POST")
 	r.HandleFunc("/backend/AnswerQuestion", Authz(AnswerQuestion)).Methods("POST")
+	r.HandleFunc("/backend/ApproveQuestion", Authz(ApproveQuestion)).Methods("POST")
+	r.HandleFunc("/backend/IgnoreQuestion", Authz(IgnoreQuestion)).Methods("POST")
 	r.HandleFunc("/backend/CurrentSession", CurrentSession).Methods("POST")
 	r.HandleFunc("/backend/AutoLogin", AutoLogin).Methods("POST")
 

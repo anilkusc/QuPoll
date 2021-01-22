@@ -43,7 +43,7 @@ class Questions extends React.Component {
                                 <CardContent>
                                     {checkQuestions ? (
                                         this.props.questions.sort((a, b) => a.like_count > b.like_count ? -1 : 1).map(question => {
-                                            if (question.answered == 0) {
+                                            if (question.answered == 0 && question.approved == 1) {
                                                 return (
                                                     <ul key={question.id}>
                                                         <QuestionCard authenticated={this.props.authenticated} session={this.props.session} handleUpdateQuestions={this.props.handleUpdateQuestions} question={question} />
@@ -68,7 +68,7 @@ class Questions extends React.Component {
                                     {
                                         checkQuestions ? (
                                             this.props.questions.sort((a, b) => a.like_count > b.like_count ? -1 : 1).map(question => {
-                                                if (question.answered == 1) {
+                                                if (question.answered == 1 && question.approved == 1) {
                                                     return (
                                                         <ul key={question.id}>
                                                             <QuestionCard authenticated={this.props.authenticated} session={this.props.session} handleUpdateQuestions={this.props.handleUpdateQuestions} question={question} />

@@ -99,7 +99,7 @@ class QuestionCard extends React.Component {
                             <b>{this.props.question.id}</b>
                         </Typography>
                     </CardContent>
-                    <CardContent>
+                    <CardContent  style={{whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}>
                         {this.props.question.question}
                     </CardContent>
                     <CardActions disableSpacing>
